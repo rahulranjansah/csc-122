@@ -1,0 +1,12 @@
+# A zoo file consists of parts:
+#   (1) Animals
+#   (2) Etc.
+#
+#
+# Animals are of the form:
+#
+#     <unique-id> <type>
+#
+Adam tiger     # Adam is the name of a tiger
+Phylis tiger   # Phylis is also a tiger
+George gorilla

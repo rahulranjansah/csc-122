@@ -1,0 +1,9 @@
+#
+# A zoo consisting of all valid, concrete animal types
+#
+Lola Tiger
+Chiffon		lion
+Razor			Mackerel
+Steven     gorilla
+
+# Empty
