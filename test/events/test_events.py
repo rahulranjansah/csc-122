@@ -54,11 +54,3 @@ class TestZoo(unittest.TestCase):
         # Test inequality comparison
         self.assertTrue(event1 != event2)
         self.assertFalse(event2 != event3)
-
-        # # Test ordering with multiple events
-        # events = [event2, event1, event3]
-        # events.sort()
-
-        # # After sorting, events should be ordered by start time
-        # self.assertEqual(events[0], event1)
-        # self.assertTrue(events[1] == events[2])

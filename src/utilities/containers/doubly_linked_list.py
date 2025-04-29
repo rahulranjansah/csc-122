@@ -50,26 +50,26 @@ class DoublyLinkedList(Collection, Iterator, Generic[T]):
     def __contains__(self, value: T) -> bool:
         return self.__get_node(value) is not None
 
-    def __iter__(self) -> DoublyLinkedList:
+    def __iter__(self) -> 'DoublyLinkedList':
         """Initialize the iterator and return the list itself. (Given sentinel)"""
         self._current = self._head._next
         return self
 
     def __next__(self):
-        if self._head == self._tail:
-            return StopIteration
+        if self._current == self._tail:
+            raise StopIteration
 
-        value = self._head._data
-        self._head = self._head._next
-
+        value = self._current._data
+        self._current = self._current._next
         return value
+
 
     def __len__(self) -> int:
         return self._size
 
     def __getitem__(self, index: int) -> T:
         """Return the item located at the 0-based index."""
-        if index <  0 and index >= self._size:
+        if index <  0 or index >= self._size:
             raise IndexError("Index out of range")
 
         current = self._head._next
@@ -80,18 +80,18 @@ class DoublyLinkedList(Collection, Iterator, Generic[T]):
 
     def __setitem__(self, index: int, val: T) -> None:
         """Set the item located at the 0-based index."""
-        if index <  0 and index >= self._size:
+        if index <  0 or index >= self._size:
             raise IndexError("Index out of range")
 
         current = self._head._next
         for i in range(index):
-            curent = current._next
+            current = current._next
 
         current._data = val
 
     def __delitem__(self, index: int) -> T:
         """Set the item located at the 0-based index."""
-        if index <  0 and index >= self._size:
+        if index <  0 or index >= self._size:
             raise IndexError("Index out of range")
 
         current = self._head._next
@@ -99,7 +99,7 @@ class DoublyLinkedList(Collection, Iterator, Generic[T]):
             current = current._next
 
         current._prev._next = current._next
-        current._next._next = current._prev
+        current._next._prev = current._prev
 
         self._size -= 1
 
@@ -113,20 +113,30 @@ class DoublyLinkedList(Collection, Iterator, Generic[T]):
             current = current._next
         return " <-> ".join(values)
 
+    # count
     def index(self, val: T) -> int:
-        """Returns the 0-based index of the first occurrence of val."""
+        """Returns the 0-based index of the first occurrence of val in sential node"""
         count = 0
-        current = self._head
-        while current:
+        current = self._head._next
+        while current != self._tail:
             if val == current._data:
                 return count
 
             count += 1
             current = current._next
 
-        return -(self._size + 1)
+        raise ValueError(f"{val} not in the list")
 
+    # index removal
+    def remove_at(self, index: int) -> bool:
+        """Deletes the item at the 0-based index. If deletion, fails False is returned"""
+        try:
+            self.__delitem__(index)
+            return True
+        except IndexError:
+            return False
 
+    # value removal
     def remove(self, value: T) -> bool:
         node = self.__get_node(value)
         if node is not None:
@@ -134,6 +144,7 @@ class DoublyLinkedList(Collection, Iterator, Generic[T]):
             return True
         return False
 
+    # value based remove all
     def remove_all(self, value: T) -> int:
         count = 0
         current = self._head._next
@@ -161,7 +172,7 @@ class DoublyLinkedList(Collection, Iterator, Generic[T]):
 
     def pop_front(self):
         if self.is_empty():
-            return EmptyCollectionException(Exception)
+            raise EmptyCollectionException("Cannot pop from an empty list")
         node = self._head._next
         value = node._data
 
@@ -187,3 +198,13 @@ class DoublyLinkedList(Collection, Iterator, Generic[T]):
         return matches
 
 
+# dll = DoublyLinkedList()
+# dll.push_back(10)
+# dll.push_back(20)
+# dll.push_back(30)
+
+# result = dll.remove_at(1)
+# print(result)
+# print(dll)
+# result = dll.remove_at(5)
+# print(result)
